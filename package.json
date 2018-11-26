@@ -1,6 +1,6 @@
 {
   "name": "docsify-sidebar-collapse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "sidebar-collapse plugin for docsify",
   "main": "src",
   "scripts": {
@@ -21,8 +21,7 @@
   ],
   "files": [
     "src",
-    "dist",
-    "READEME"
+    "dist"
   ],
   "author": "ipeng6",
   "license": "MIT",
