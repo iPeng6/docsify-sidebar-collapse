@@ -1,0 +1,52 @@
+.sidebar-nav li {
+  position: relative;
+  margin: 0;
+}
+.sidebar-nav a {
+  text-decoration: none;
+  padding-left: 8px;
+}
+.sidebar-nav > ul > li > ul a::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 6px;
+  border-left: 1px solid #e7e7eb;
+  border-bottom: 1px solid #e7e7eb;
+}
+.sidebar-nav > ul > li > ul a::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 6px;
+  border-left: 1px solid #e7e7eb;
+}
+.sidebar-nav li:last-child a::after {
+  display: none;
+}
+.sidebar-nav .app-sub-sidebar a::before,
+.sidebar-nav .app-sub-sidebar a::after {
+  display: none;
+}
+
+.app-sub-sidebar li::before {
+  content: '#';
+}
+
+.sidebar-nav a:hover {
+  background: #eff1f3;
+}
+.sidebar-nav > ul > li > ul {
+  display: none;
+}
+
+.sidebar-nav .open ul,
+.sidebar-nav .active ul {
+  display: block;
+}
