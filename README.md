@@ -5,6 +5,10 @@
 
 支持 docsify 目录默认收起，点击具体目录再全部展开
 
+## 效果
+
+![](assets/show.gif)
+
 ## Install
 
 insert script into document like the official plugins
