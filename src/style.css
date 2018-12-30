@@ -27,9 +27,10 @@
   width: 6px;
   border-left: 1px solid #e7e7eb;
 }
-.sidebar-nav li:last-child a::after {
+.sidebar-nav li:last-child > a::after {
   display: none;
 }
+
 .sidebar-nav .app-sub-sidebar a::before,
 .sidebar-nav .app-sub-sidebar a::after {
   display: none;
@@ -46,7 +47,7 @@
   display: none;
 }
 
-.sidebar-nav .open > ul,
-.sidebar-nav .active > ul {
+.sidebar-nav .open ul,
+.sidebar-nav .active ul {
   display: block;
 }
