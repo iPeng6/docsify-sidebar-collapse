@@ -47,7 +47,18 @@
   display: none;
 }
 
-.sidebar-nav .open ul,
-.sidebar-nav .active ul {
+.app-sub-sidebar {
+  display: none;
+}
+.app-sub-sidebar.open {
+  display: block;
+}
+
+.sidebar-nav .open > ul:not(.app-sub-sidebar),
+.sidebar-nav .active > ul {
+  display: block;
+}
+
+.active + ul.app-sub-sidebar {
   display: block;
 }

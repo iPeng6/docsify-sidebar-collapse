@@ -14,5 +14,5 @@ support docsify sidebar collapsed default
 insert script into document just like the [official plugins](https://docsify.js.org/#/plugins)'s usage
 
 ```html
-<script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+<script src="//unpkg.com/docsify-sidebar-collapse@1.0.9/dist/docsify-sidebar-collapse.min.js"></script>
 ```
