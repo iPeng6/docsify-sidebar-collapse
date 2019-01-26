@@ -5,14 +5,29 @@
 
 support docsify sidebar collapsed default
 
-## 效果
+## Preview
 
 ![](assets/show.gif)
 
-## Install
+## Usage
 
-insert script into document just like the [official plugins](https://docsify.js.org/#/plugins)'s usage
+Firstly, make sure that the [loadSidebar](https://docsify.js.org/#/configuration?id=loadsidebar) config is enabled，and the Markdown file `_sidebar.md` is provided in the root directory.
+
+Then insert script into document just like the [official plugins](https://docsify.js.org/#/plugins)'s usage
 
 ```html
-<script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+ <script>
+    window.$docsify = {
+      loadSidebar: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+      },
+      subMaxLevel: 3,
+      ...
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+
+  <!-- plugins -->
+  <script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js">
 ```
