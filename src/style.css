@@ -11,7 +11,7 @@
 }
 
 .sidebar-nav .open > ul:not(.app-sub-sidebar),
-.sidebar-nav .active > ul {
+.sidebar-nav .active:not(.hold) > ul {
   display: block;
 }
 
