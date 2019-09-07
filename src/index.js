@@ -65,16 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target.tagName === 'A') {
         const elp = e.target.parentElement
         if (elp.tagName === 'LI') {
-          if (elp.classList.contains('active')) {
+          if (elp.classList.contains('open')) {
             requestAnimationFrame(() => {
-              elp.classList.remove('active')
+              elp.classList.add('collapse')
               elp.classList.remove('open')
               elp.classList.add('hold')
             })
           } else {
             requestAnimationFrame(() => {
               if (elp.classList.contains('hold')) {
-                elp.classList.add('active')
+                elp.classList.remove('collapse')
+                elp.classList.add('open')
                 elp.classList.remove('hold')
               }
             })
