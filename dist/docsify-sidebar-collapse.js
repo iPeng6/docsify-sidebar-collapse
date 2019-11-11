@@ -86,6 +86,10 @@
   }, false);
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.sidebar-nav').addEventListener('click', function (e) {
+      if (e.target.tagName === 'LI') {
+        e.target.classList.toggle('open');
+      }
+
       if (e.target.tagName === 'A') {
         var elp = e.target.parentElement;
 

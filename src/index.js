@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.sidebar-nav').addEventListener(
     'click',
     e => {
+      if (e.target.tagName === 'LI') {
+        e.target.classList.toggle('open')
+      }
+
       if (e.target.tagName === 'A') {
         const elp = e.target.parentElement
         if (elp.tagName === 'LI') {

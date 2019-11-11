@@ -1,4 +1,5 @@
 {
 	"prettier.singleQuote": true,
-	"prettier.semi": false
+	"prettier.semi": false,
+	"editor.formatOnSave": true
 }
