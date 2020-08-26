@@ -1,5 +1,7 @@
 import './style.css'
 
+let lastTop = 0 // 侧边栏滚动状态
+
 $docsify.plugins = [
   function (hook, vm) {
     hook.doneEach(function (html, next) {
@@ -24,6 +26,13 @@ $docsify.plugins = [
           li.classList.add('file')
         }
       })
+      const curTop = document
+        .querySelector(`a[href="${location.hash}"]`)
+        .getBoundingClientRect().top
+      // console.log('to', lastTop, curTop)
+      document
+        .querySelector('.sidebar')
+        .scrollTo(0, curTop < lastTop ? 0 : lastTop)
       next(html)
     })
   },
@@ -70,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.sidebar-nav').addEventListener(
     'click',
     (e) => {
+      lastTop = document.querySelector('.sidebar').scrollTop
+      // console.log('click', lastTop)
       if (e.target.tagName === 'LI') {
         e.target.classList.toggle('open')
       }
