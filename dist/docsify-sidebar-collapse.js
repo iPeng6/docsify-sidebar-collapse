@@ -60,9 +60,14 @@
           li.classList.add('file');
         }
       });
-      var curTop = document.querySelector("a[href=\"".concat(location.hash, "\"]")).getBoundingClientRect().top; // console.log('to', lastTop, curTop)
+      var curLink = document.querySelector("a[href=\"".concat(location.hash, "\"]"));
 
-      document.querySelector('.sidebar').scrollTo(0, curTop < lastTop ? 0 : lastTop);
+      if (curLink) {
+        var curTop = curLink.getBoundingClientRect().top; // console.log('to', lastTop, curTop)
+
+        document.querySelector('.sidebar').scrollTo(0, curTop < lastTop ? 0 : lastTop);
+      }
+
       next(html);
     });
   }].concat($docsify.plugins || []);
