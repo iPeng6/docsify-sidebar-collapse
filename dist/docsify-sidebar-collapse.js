@@ -34,8 +34,11 @@
   var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.hold) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
   styleInject(css);
 
+  var lastTop = 0; // 侧边栏滚动状态
+
   $docsify.plugins = [function (hook, vm) {
     hook.doneEach(function (html, next) {
+      // 每次路由切换时数据全部加载完成后调用，没有参数。
       var el = document.querySelector('.sidebar-nav .active');
 
       if (el) {
@@ -50,6 +53,16 @@
         }
       }
 
+      document.querySelectorAll('.sidebar-nav li').forEach(function (li) {
+        if (li.querySelector('ul:not(.app-sub-sidebar)')) {
+          li.classList.add('folder');
+        } else {
+          li.classList.add('file');
+        }
+      });
+      var curTop = document.querySelector("a[href=\"".concat(location.hash, "\"]")).getBoundingClientRect().top; // console.log('to', lastTop, curTop)
+
+      document.querySelector('.sidebar').scrollTo(0, curTop < lastTop ? 0 : lastTop);
       next(html);
     });
   }].concat($docsify.plugins || []);
@@ -86,6 +99,8 @@
   }, false);
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.sidebar-nav').addEventListener('click', function (e) {
+      lastTop = document.querySelector('.sidebar').scrollTop; // console.log('click', lastTop)
+
       if (e.target.tagName === 'LI') {
         e.target.classList.toggle('open');
       }
