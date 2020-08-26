@@ -1,8 +1,9 @@
 import './style.css'
 
 $docsify.plugins = [
-  function(hook, vm) {
-    hook.doneEach(function(html, next) {
+  function (hook, vm) {
+    hook.doneEach(function (html, next) {
+      // 每次路由切换时数据全部加载完成后调用，没有参数。
       let el = document.querySelector('.sidebar-nav .active')
       if (el) {
         el.classList.add('open')
@@ -16,18 +17,25 @@ $docsify.plugins = [
           el = el.parentElement
         }
       }
+      document.querySelectorAll('.sidebar-nav li').forEach((li) => {
+        if (li.querySelector('ul:not(.app-sub-sidebar)')) {
+          li.classList.add('folder')
+        } else {
+          li.classList.add('file')
+        }
+      })
       next(html)
     })
-  }
+  },
 ].concat($docsify.plugins || [])
 
-window.addEventListener('hashchange', e => {
+window.addEventListener('hashchange', (e) => {
   requestAnimationFrame(() => {
     const el = document.querySelector('.sidebar-nav .active')
     if (el) {
       el.parentElement.parentElement
         .querySelectorAll('.app-sub-sidebar')
-        .forEach(dom => dom.classList.remove('open'))
+        .forEach((dom) => dom.classList.remove('open'))
 
       if (
         el.parentElement.tagName === 'LI' ||
@@ -41,13 +49,13 @@ window.addEventListener('hashchange', e => {
 
 document.addEventListener(
   'scroll',
-  e => {
+  (e) => {
     requestAnimationFrame(() => {
       let el = document.querySelector('.app-sub-sidebar > .active')
       if (el) {
         el.parentElement.parentElement
           .querySelectorAll('.app-sub-sidebar')
-          .forEach(dom => dom.classList.remove('open'))
+          .forEach((dom) => dom.classList.remove('open'))
         while (el.parentElement.classList.contains('app-sub-sidebar')) {
           el.parentElement.classList.add('open')
           el = el.parentElement
@@ -61,7 +69,7 @@ document.addEventListener(
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.sidebar-nav').addEventListener(
     'click',
-    e => {
+    (e) => {
       if (e.target.tagName === 'LI') {
         e.target.classList.toggle('open')
       }
