@@ -34,4 +34,4 @@ Then insert script into document just like the [official plugins](https://docsif
 
 ## Arrow Style demo
 
-[](src/sidebar.css)
+[sidebar.css](./src/sidebar.css)
