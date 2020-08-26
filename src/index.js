@@ -26,13 +26,14 @@ $docsify.plugins = [
           li.classList.add('file')
         }
       })
-      const curTop = document
-        .querySelector(`a[href="${location.hash}"]`)
-        .getBoundingClientRect().top
-      // console.log('to', lastTop, curTop)
-      document
-        .querySelector('.sidebar')
-        .scrollTo(0, curTop < lastTop ? 0 : lastTop)
+      const curLink = document.querySelector(`a[href="${location.hash}"]`)
+      if (curLink) {
+        const curTop = curLink.getBoundingClientRect().top
+        // console.log('to', lastTop, curTop)
+        document
+          .querySelector('.sidebar')
+          .scrollTo(0, curTop < lastTop ? 0 : lastTop)
+      }
       next(html)
     })
   },
