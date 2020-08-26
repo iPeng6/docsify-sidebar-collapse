@@ -31,3 +31,7 @@ Then insert script into document just like the [official plugins](https://docsif
   <!-- plugins -->
   <script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js">
 ```
+
+## Arrow Style demo
+
+[](src/sidebar.css)
