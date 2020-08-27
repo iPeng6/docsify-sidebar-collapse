@@ -16,22 +16,26 @@ Firstly, make sure that the [loadSidebar](https://docsify.js.org/#/configuration
 Then insert script into document just like the [official plugins](https://docsify.js.org/#/plugins)'s usage
 
 ```html
- <script>
-    window.$docsify = {
-      loadSidebar: true,
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md',
-      },
-      subMaxLevel: 3,
-      ...
-    }
-  </script>
-  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<script>
+  window.$docsify = {
+    loadSidebar: true,
+    alias: {
+      '/.*/_sidebar.md': '/_sidebar.md',
+    },
+    subMaxLevel: 3,
+    ...
+  }
+</script>
+<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
 
-  <!-- plugins -->
-  <script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js">
+<!-- plugins -->
+<script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 ```
 
-## Arrow Style demo
+## Style demo
 
-[sidebar.css](./src/sidebar.css)
+- arrow style
+
+  参考： [sidebar.css](./src/sidebar.css)
+
+  引用地址： `<link rel="stylesheet" href="https://unpkg.com/docsify-sidebar-collapse@1.1.5/src/sidebar.css">`
