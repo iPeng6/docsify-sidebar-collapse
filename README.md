@@ -36,6 +36,6 @@ Then insert script into document just like the [official plugins](https://docsif
 
 - arrow style
 
-  参考： [sidebar.css](./src/sidebar.css)
+  Reference: [sidebar.css](./src/sidebar.css)
 
-  引用地址： `<link rel="stylesheet" href="https://unpkg.com/docsify-sidebar-collapse@1.1.5/src/sidebar.css">`
+  Reference address: `<link rel="stylesheet" href="https://unpkg.com/docsify-sidebar-collapse@1.1.5/src/sidebar.css">`
