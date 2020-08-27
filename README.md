@@ -38,4 +38,8 @@ Then insert script into document just like the [official plugins](https://docsif
 
   Reference: [sidebar.css](./src/sidebar.css)
 
-  Reference address: `<link rel="stylesheet" href="https://unpkg.com/docsify-sidebar-collapse@1.1.5/src/sidebar.css">`
+- folder style
+
+  Reference: [sidebar-folder.css](./src/sidebar-folder.css)
+
+  ![](assets/style-folder.jpg)
