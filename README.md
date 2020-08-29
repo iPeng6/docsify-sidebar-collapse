@@ -3,7 +3,7 @@
 ![](https://img.shields.io/npm/v/docsify-sidebar-collapse.svg)
 ![](https://img.shields.io/github/license/iPeng6/docsify-sidebar-collapse.svg)
 
-support docsify sidebar collapsed default
+Support docsify sidebar catalog expand and collapse
 
 ## Preview
 
