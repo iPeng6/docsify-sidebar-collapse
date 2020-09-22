@@ -26,10 +26,10 @@ Then insert script into document just like the [official plugins](https://docsif
     ...
   }
 </script>
-<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
 
 <!-- plugins -->
-<script src="//unpkg.com/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 ```
 
 ## Style demo
