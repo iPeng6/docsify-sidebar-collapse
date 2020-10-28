@@ -38,7 +38,6 @@
 
   $docsify.plugins = [function (hook, vm) {
     hook.doneEach(function (html, next) {
-      // 每次路由切换时数据全部加载完成后调用，没有参数。
       var el = document.querySelector('.sidebar-nav .active');
 
       if (el) {
@@ -59,13 +58,19 @@
         } else {
           li.classList.add('file');
         }
-      });
-      var curLink = document.querySelector("a[href=\"".concat(location.hash, "\"]"));
+      }); // fix #12 空格问题
+
+      var curLink = document.querySelector("a[href=\"".concat(decodeURIComponent(location.hash).replace(/ /gi, '%20'), "\"]"));
+      var dom = curLink;
+
+      while (dom && dom.classList && dom.className !== 'sidebar-nav') {
+        dom.classList.add('open');
+        dom = dom.parentNode;
+      }
 
       if (curLink) {
-        var curTop = curLink.getBoundingClientRect().top; // console.log('to', lastTop, curTop)
-
-        document.querySelector('.sidebar').scrollTo(0, curTop < lastTop ? 0 : lastTop);
+        var curTop = curLink.getBoundingClientRect().top;
+        document.querySelector('.sidebar').scrollBy(0, curTop - lastTop);
       }
 
       next(html);
@@ -104,7 +109,7 @@
   }, false);
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.sidebar-nav').addEventListener('click', function (e) {
-      lastTop = document.querySelector('.sidebar').scrollTop; // console.log('click', lastTop)
+      lastTop = e.target.getBoundingClientRect().top;
 
       if (e.target.tagName === 'LI') {
         e.target.classList.toggle('open');
