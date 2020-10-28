@@ -59,11 +59,12 @@ Then insert script into document just like the [official plugins](https://docsif
 ## Style demo
 
 - arrow style
-
-  Reference: [sidebar.css](./src/sidebar.css)
+  ```html
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  ```
 
 - folder style
-
-  Reference: [sidebar-folder.css](./src/sidebar-folder.css)
-
+  ```html
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" />
+  ```
   ![](assets/style-folder.jpg)

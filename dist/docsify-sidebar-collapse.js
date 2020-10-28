@@ -31,7 +31,7 @@
     }
   }
 
-  var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.hold) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
+  var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.collapse) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
   styleInject(css);
 
   var lastTop = 0; // 侧边栏滚动状态
@@ -116,32 +116,46 @@
       } // fix #11 空行问题
 
 
-      if (e.target.parentNode && e.target.parentNode.tagName === 'LI') {
+      if (e.target.tagName === 'P' && e.target.parentNode && e.target.parentNode.tagName === 'LI') {
         e.target.parentNode.classList.toggle('open');
       }
 
       if (e.target.tagName === 'A') {
-        var elp = e.target.parentElement;
+        var elp = findTagParent(e.target, 'LI', 2);
 
-        if (elp.tagName === 'LI') {
+        if (elp) {
           if (elp.classList.contains('open')) {
             requestAnimationFrame(function () {
               elp.classList.add('collapse');
               elp.classList.remove('open');
-              elp.classList.add('hold');
             });
           } else {
             requestAnimationFrame(function () {
-              if (elp.classList.contains('hold')) {
+              if (elp.classList.contains('collapse')) {
                 elp.classList.remove('collapse');
-                elp.classList.add('open');
-                elp.classList.remove('hold');
               }
+
+              elp.classList.add('open');
             });
           }
         }
       }
     }, true);
   });
+
+  function findTagParent(curNode, tagName, level) {
+    var l = 0;
+
+    while (curNode) {
+      l++;
+      if (l > level) return;
+
+      if (curNode.parentNode.tagName === tagName) {
+        return curNode.parentNode;
+      }
+
+      curNode = curNode.parentNode;
+    }
+  }
 
 })));

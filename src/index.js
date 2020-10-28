@@ -95,26 +95,28 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.classList.toggle('open')
       }
       // fix #11 空行问题
-      if (e.target.parentNode && e.target.parentNode.tagName === 'LI') {
+      if (
+        e.target.tagName === 'P' &&
+        e.target.parentNode &&
+        e.target.parentNode.tagName === 'LI'
+      ) {
         e.target.parentNode.classList.toggle('open')
       }
 
       if (e.target.tagName === 'A') {
-        const elp = e.target.parentElement
-        if (elp.tagName === 'LI') {
+        const elp = findTagParent(e.target, 'LI', 2)
+        if (elp) {
           if (elp.classList.contains('open')) {
             requestAnimationFrame(() => {
               elp.classList.add('collapse')
               elp.classList.remove('open')
-              elp.classList.add('hold')
             })
           } else {
             requestAnimationFrame(() => {
-              if (elp.classList.contains('hold')) {
+              if (elp.classList.contains('collapse')) {
                 elp.classList.remove('collapse')
-                elp.classList.add('open')
-                elp.classList.remove('hold')
               }
+              elp.classList.add('open')
             })
           }
         }
@@ -123,3 +125,15 @@ document.addEventListener('DOMContentLoaded', () => {
     true
   )
 })
+
+function findTagParent(curNode, tagName, level) {
+  let l = 0
+  while (curNode) {
+    l++
+    if (l > level) return
+    if (curNode.parentNode.tagName === tagName) {
+      return curNode.parentNode
+    }
+    curNode = curNode.parentNode
+  }
+}
