@@ -113,6 +113,11 @@
 
       if (e.target.tagName === 'LI') {
         e.target.classList.toggle('open');
+      } // fix #11 空行问题
+
+
+      if (e.target.parentNode && e.target.parentNode.tagName === 'LI') {
+        e.target.parentNode.classList.toggle('open');
       }
 
       if (e.target.tagName === 'A') {
