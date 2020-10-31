@@ -7,7 +7,7 @@ function sidebarCollapsePlugin(hook, vm) {
 
     addFolderFileClass()
 
-    syncScrollTop()
+    syncScrollTop(activeNode)
 
     next(html)
   })

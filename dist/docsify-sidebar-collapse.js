@@ -39,7 +39,7 @@
       var activeNode = getActiveNode();
       openActiveToRoot(activeNode);
       addFolderFileClass();
-      syncScrollTop();
+      syncScrollTop(activeNode);
       next(html);
     });
   }
