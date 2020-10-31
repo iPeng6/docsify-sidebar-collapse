@@ -1,7 +1,5 @@
 import './style.css'
 
-let lastTop // 侧边栏滚动状态
-
 function sidebarCollapsePlugin(hook, vm) {
   hook.doneEach(function (html, next) {
     const activeNode = getActiveNode()
@@ -9,11 +7,7 @@ function sidebarCollapsePlugin(hook, vm) {
 
     addFolderFileClass()
 
-    if (activeNode && lastTop != undefined) {
-      const curTop = activeNode.getBoundingClientRect().top
-
-      document.querySelector('.sidebar').scrollBy(0, curTop - lastTop)
-    }
+    syncScrollTop()
 
     next(html)
   })
@@ -26,6 +20,14 @@ function init() {
       .addEventListener('click', handleMenuClick)
   })
   document.addEventListener('scroll', scrollSyncMenuStatus)
+}
+
+let lastTop // 侧边栏滚动状态
+function syncScrollTop(activeNode) {
+  if (activeNode && lastTop != undefined) {
+    const curTop = activeNode.getBoundingClientRect().top
+    document.querySelector('.sidebar').scrollBy(0, curTop - lastTop)
+  }
 }
 
 function scrollSyncMenuStatus() {
@@ -66,6 +68,7 @@ function handleMenuClick(e) {
       newActiveNode.classList.remove('collapse')
     }, 0)
   }
+  syncScrollTop(newActiveNode)
 }
 
 function getActiveNode() {

@@ -34,19 +34,12 @@
   var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.collapse) > ul {\n  display: block;\n}\n\n/* 抖动 */\n.sidebar-nav li.open:not(.collapse) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
   styleInject(css);
 
-  var lastTop; // 侧边栏滚动状态
-
   function sidebarCollapsePlugin(hook, vm) {
     hook.doneEach(function (html, next) {
       var activeNode = getActiveNode();
       openActiveToRoot(activeNode);
       addFolderFileClass();
-
-      if (activeNode && lastTop != undefined) {
-        var curTop = activeNode.getBoundingClientRect().top;
-        document.querySelector('.sidebar').scrollBy(0, curTop - lastTop);
-      }
-
+      syncScrollTop();
       next(html);
     });
   }
@@ -56,6 +49,15 @@
       document.querySelector('.sidebar-nav').addEventListener('click', handleMenuClick);
     });
     document.addEventListener('scroll', scrollSyncMenuStatus);
+  }
+
+  var lastTop; // 侧边栏滚动状态
+
+  function syncScrollTop(activeNode) {
+    if (activeNode && lastTop != undefined) {
+      var curTop = activeNode.getBoundingClientRect().top;
+      document.querySelector('.sidebar').scrollBy(0, curTop - lastTop);
+    }
   }
 
   function scrollSyncMenuStatus() {
@@ -98,6 +100,8 @@
         newActiveNode.classList.remove('collapse');
       }, 0);
     }
+
+    syncScrollTop(newActiveNode);
   }
 
   function getActiveNode() {
