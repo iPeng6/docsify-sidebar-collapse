@@ -15,6 +15,11 @@
   display: block;
 }
 
+/* 抖动 */
+.sidebar-nav li.open:not(.collapse) > ul {
+  display: block;
+}
+
 .active + ul.app-sub-sidebar {
   display: block;
 }

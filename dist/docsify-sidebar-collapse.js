@@ -31,119 +31,120 @@
     }
   }
 
-  var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.collapse) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
+  var css = ".sidebar-nav > ul > li ul {\n  display: none;\n}\n\n.app-sub-sidebar {\n  display: none;\n}\n\n.app-sub-sidebar.open {\n  display: block;\n}\n\n.sidebar-nav .open > ul:not(.app-sub-sidebar),\n.sidebar-nav .active:not(.collapse) > ul {\n  display: block;\n}\n\n/* 抖动 */\n.sidebar-nav li.open:not(.collapse) > ul {\n  display: block;\n}\n\n.active + ul.app-sub-sidebar {\n  display: block;\n}\n";
   styleInject(css);
 
-  var lastTop = 0; // 侧边栏滚动状态
+  var lastTop; // 侧边栏滚动状态
 
-  $docsify.plugins = [function (hook, vm) {
+  function sidebarCollapsePlugin(hook, vm) {
     hook.doneEach(function (html, next) {
-      var el = document.querySelector('.sidebar-nav .active');
+      var activeNode = getActiveNode();
+      openActiveToRoot(activeNode);
+      addFolderFileClass();
 
-      if (el) {
-        el.classList.add('open');
-
-        while (el.className !== 'sidebar-nav') {
-          if (el.parentElement.tagName === 'LI' || el.parentElement.className === 'app-sub-sidebar') {
-            el.parentElement.classList.add('open');
-          }
-
-          el = el.parentElement;
-        }
-      }
-
-      document.querySelectorAll('.sidebar-nav li').forEach(function (li) {
-        if (li.querySelector('ul:not(.app-sub-sidebar)')) {
-          li.classList.add('folder');
-        } else {
-          li.classList.add('file');
-        }
-      }); // fix #12 空格问题
-
-      var curLink = document.querySelector("a[href=\"".concat(decodeURIComponent(location.hash).replace(/ /gi, '%20'), "\"]"));
-      var dom = curLink;
-
-      while (dom && dom.classList && dom.className !== 'sidebar-nav') {
-        dom.classList.add('open');
-        dom = dom.parentNode;
-      }
-
-      if (curLink) {
-        var curTop = curLink.getBoundingClientRect().top;
+      if (activeNode && lastTop != undefined) {
+        var curTop = activeNode.getBoundingClientRect().top;
         document.querySelector('.sidebar').scrollBy(0, curTop - lastTop);
       }
 
       next(html);
     });
-  }].concat($docsify.plugins || []);
-  window.addEventListener('hashchange', function (e) {
-    requestAnimationFrame(function () {
-      var el = document.querySelector('.sidebar-nav .active');
+  }
 
-      if (el) {
-        el.parentElement.parentElement.querySelectorAll('.app-sub-sidebar').forEach(function (dom) {
-          return dom.classList.remove('open');
-        });
-
-        if (el.parentElement.tagName === 'LI' || el.parentElement.className === 'app-sub-sidebar') {
-          el.parentElement.classList.add('open');
-        }
-      }
+  function init() {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('.sidebar-nav').addEventListener('click', handleMenuClick);
     });
-  });
-  document.addEventListener('scroll', function (e) {
+    document.addEventListener('scroll', scrollSyncMenuStatus);
+  }
+
+  function scrollSyncMenuStatus() {
     requestAnimationFrame(function () {
       var el = document.querySelector('.app-sub-sidebar > .active');
 
       if (el) {
-        el.parentElement.parentElement.querySelectorAll('.app-sub-sidebar').forEach(function (dom) {
+        el.parentNode.parentNode.querySelectorAll('.app-sub-sidebar').forEach(function (dom) {
           return dom.classList.remove('open');
         });
 
-        while (el.parentElement.classList.contains('app-sub-sidebar')) {
-          el.parentElement.classList.add('open');
-          el = el.parentElement;
-        }
-      }
-    });
-  }, false);
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('.sidebar-nav').addEventListener('click', function (e) {
-      lastTop = e.target.getBoundingClientRect().top;
-
-      if (e.target.tagName === 'LI') {
-        e.target.classList.toggle('open');
-      } // fix #11 空行问题
-
-
-      if (e.target.tagName === 'P' && e.target.parentNode && e.target.parentNode.tagName === 'LI') {
-        e.target.parentNode.classList.toggle('open');
-      }
-
-      if (e.target.tagName === 'A') {
-        var elp = findTagParent(e.target, 'LI', 2);
-
-        if (elp) {
-          if (elp.classList.contains('open')) {
-            requestAnimationFrame(function () {
-              elp.classList.add('collapse');
-              elp.classList.remove('open');
-            });
+        while (el.parentNode.classList.contains('app-sub-sidebar')) {
+          if (el.parentNode.classList.contains('open')) {
+            break;
           } else {
-            requestAnimationFrame(function () {
-              if (elp.classList.contains('collapse')) {
-                elp.classList.remove('collapse');
-              }
-
-              elp.classList.add('open');
-            });
+            el.parentNode.classList.add('open');
+            el = el.parentNode;
           }
         }
       }
-    }, true);
-  });
+    });
+  }
+
+  function handleMenuClick(e) {
+    lastTop = e.target.getBoundingClientRect().top;
+    var newActiveNode = findTagParent(e.target, 'LI', 2);
+    if (!newActiveNode) return;
+
+    if (newActiveNode.classList.contains('open')) {
+      newActiveNode.classList.remove('open'); // docsify 默认行为会操作 collapse，我们异步之后修补
+
+      setTimeout(function () {
+        newActiveNode.classList.add('collapse');
+      }, 0);
+    } else {
+      removeOpenToRoot(getActiveNode());
+      openActiveToRoot(newActiveNode); // docsify 默认行为会操作 collapse，我们异步之后修补
+
+      setTimeout(function () {
+        newActiveNode.classList.remove('collapse');
+      }, 0);
+    }
+  }
+
+  function getActiveNode() {
+    var node = document.querySelector('.sidebar-nav .active');
+
+    if (!node) {
+      var curLink = document.querySelector("a[href=\"".concat(decodeURIComponent(location.hash).replace(/ /gi, '%20'), "\"]"));
+      node = findTagParent(curLink, 'LI', 2);
+
+      if (node) {
+        node.classList.add('active');
+      }
+    }
+
+    return node;
+  }
+
+  function openActiveToRoot(node) {
+    if (node) {
+      node.classList.add('open', 'active');
+
+      while (node && node.className !== 'sidebar-nav') {
+        if (node.parentNode.tagName === 'LI' || node.parentNode.className === 'app-sub-sidebar') {
+          node.parentNode.classList.add('open');
+        }
+
+        node = node.parentNode;
+      }
+    }
+  }
+
+  function removeOpenToRoot(node) {
+    if (node) {
+      node.classList.remove('open', 'active');
+
+      while (node && node.className !== 'sidebar-nav') {
+        if (node.parentNode.tagName === 'LI' || node.parentNode.className === 'app-sub-sidebar') {
+          node.parentNode.classList.remove('open');
+        }
+
+        node = node.parentNode;
+      }
+    }
+  }
 
   function findTagParent(curNode, tagName, level) {
+    if (curNode && curNode.tagName === tagName) return curNode;
     var l = 0;
 
     while (curNode) {
@@ -157,5 +158,74 @@
       curNode = curNode.parentNode;
     }
   }
+
+  function addFolderFileClass() {
+    document.querySelectorAll('.sidebar-nav li').forEach(function (li) {
+      if (li.querySelector('ul:not(.app-sub-sidebar)')) {
+        li.classList.add('folder');
+      } else {
+        li.classList.add('file');
+      }
+    });
+  }
+
+  init();
+
+  var css$1 = "@media screen and (max-width: 768px) {\n  /* 移动端适配 */\n  .markdown-section {\n    max-width: none;\n    padding: 16px;\n  }\n  /* 改变原来按钮热区大小 */\n  .sidebar-toggle {\n    padding: 0 0 10px 10px;\n  }\n  /* my pin */\n  .sidebar-pin {\n    appearance: none;\n    outline: none;\n    position: fixed;\n    bottom: 0;\n    border: none;\n    width: 40px;\n    height: 40px;\n    background: transparent;\n  }\n}\n";
+  styleInject(css$1);
+
+  var PIN = 'DOCSIFY_SIDEBAR_PIN_FLAG';
+
+  function init$1() {
+    // 响应式尺寸 @media screen and (max-width: 768px)
+    if (document.documentElement.clientWidth > 768) return;
+    localStorage.setItem(PIN, false); // 添加覆盖标签
+
+    var btn = document.createElement('button');
+    btn.classList.add('sidebar-pin');
+    btn.onclick = togglePin;
+    document.body.append(btn);
+    window.addEventListener('load', function () {
+      var content = document.querySelector('.content'); // 点击内容区域收起侧边栏
+
+      document.body.onclick = content.onclick = function (e) {
+        if (e.target === document.body || e.currentTarget === content) {
+          if (localStorage.getItem(PIN) === 'true') {
+            togglePin();
+          }
+        }
+      };
+    });
+  }
+
+  function togglePin() {
+    var pin = localStorage.getItem(PIN);
+    pin = pin === 'true';
+    localStorage.setItem(PIN, !pin);
+
+    if (pin) {
+      document.querySelector('.sidebar').style.transform = 'translateX(0)';
+      document.querySelector('.content').style.transform = 'translateX(0)';
+    } else {
+      document.querySelector('.sidebar').style.transform = 'translateX(300px)';
+      document.querySelector('.content').style.transform = 'translateX(300px)';
+    }
+  }
+
+  init$1();
+
+  function install() {
+    if (!window.$docsify) {
+      console.error('这是一个docsify插件，请先引用docsify库！');
+    } else {
+      for (var _len = arguments.length, plugins = new Array(_len), _key = 0; _key < _len; _key++) {
+        plugins[_key] = arguments[_key];
+      }
+
+      $docsify.plugins = plugins.concat($docsify.plugins || []);
+    }
+  }
+
+  install(sidebarCollapsePlugin);
 
 })));

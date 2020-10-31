@@ -1,0 +1,141 @@
+import './style.css'
+
+let lastTop // 侧边栏滚动状态
+
+function sidebarCollapsePlugin(hook, vm) {
+  hook.doneEach(function (html, next) {
+    const activeNode = getActiveNode()
+    openActiveToRoot(activeNode)
+
+    addFolderFileClass()
+
+    if (activeNode && lastTop != undefined) {
+      const curTop = activeNode.getBoundingClientRect().top
+
+      document.querySelector('.sidebar').scrollBy(0, curTop - lastTop)
+    }
+
+    next(html)
+  })
+}
+
+function init() {
+  document.addEventListener('DOMContentLoaded', () => {
+    document
+      .querySelector('.sidebar-nav')
+      .addEventListener('click', handleMenuClick)
+  })
+  document.addEventListener('scroll', scrollSyncMenuStatus)
+}
+
+function scrollSyncMenuStatus() {
+  requestAnimationFrame(() => {
+    let el = document.querySelector('.app-sub-sidebar > .active')
+    if (el) {
+      el.parentNode.parentNode
+        .querySelectorAll('.app-sub-sidebar')
+        .forEach((dom) => dom.classList.remove('open'))
+      while (el.parentNode.classList.contains('app-sub-sidebar')) {
+        if (el.parentNode.classList.contains('open')) {
+          break
+        } else {
+          el.parentNode.classList.add('open')
+          el = el.parentNode
+        }
+      }
+    }
+  })
+}
+
+function handleMenuClick(e) {
+  lastTop = e.target.getBoundingClientRect().top
+
+  const newActiveNode = findTagParent(e.target, 'LI', 2)
+  if (!newActiveNode) return
+  if (newActiveNode.classList.contains('open')) {
+    newActiveNode.classList.remove('open')
+    // docsify 默认行为会操作 collapse，我们异步之后修补
+    setTimeout(() => {
+      newActiveNode.classList.add('collapse')
+    }, 0)
+  } else {
+    removeOpenToRoot(getActiveNode())
+    openActiveToRoot(newActiveNode)
+    // docsify 默认行为会操作 collapse，我们异步之后修补
+    setTimeout(() => {
+      newActiveNode.classList.remove('collapse')
+    }, 0)
+  }
+}
+
+function getActiveNode() {
+  let node = document.querySelector('.sidebar-nav .active')
+
+  if (!node) {
+    const curLink = document.querySelector(
+      `a[href="${decodeURIComponent(location.hash).replace(/ /gi, '%20')}"]`
+    )
+    node = findTagParent(curLink, 'LI', 2)
+    if (node) {
+      node.classList.add('active')
+    }
+  }
+  return node
+}
+
+function openActiveToRoot(node) {
+  if (node) {
+    node.classList.add('open', 'active')
+    while (node && node.className !== 'sidebar-nav') {
+      if (
+        node.parentNode.tagName === 'LI' ||
+        node.parentNode.className === 'app-sub-sidebar'
+      ) {
+        node.parentNode.classList.add('open')
+      }
+      node = node.parentNode
+    }
+  }
+}
+
+function removeOpenToRoot(node) {
+  if (node) {
+    node.classList.remove('open', 'active')
+    while (node && node.className !== 'sidebar-nav') {
+      if (
+        node.parentNode.tagName === 'LI' ||
+        node.parentNode.className === 'app-sub-sidebar'
+      ) {
+        node.parentNode.classList.remove('open')
+      }
+      node = node.parentNode
+    }
+  }
+}
+
+function findTagParent(curNode, tagName, level) {
+  if (curNode && curNode.tagName === tagName) return curNode
+  let l = 0
+  while (curNode) {
+    l++
+    if (l > level) return
+    if (curNode.parentNode.tagName === tagName) {
+      return curNode.parentNode
+    }
+    curNode = curNode.parentNode
+  }
+}
+
+function addFolderFileClass() {
+  document.querySelectorAll('.sidebar-nav li').forEach((li) => {
+    if (li.querySelector('ul:not(.app-sub-sidebar)')) {
+      li.classList.add('folder')
+    } else {
+      li.classList.add('file')
+    }
+  })
+}
+
+init()
+
+export default sidebarCollapsePlugin
