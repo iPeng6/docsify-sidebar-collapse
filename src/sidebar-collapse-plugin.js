@@ -76,7 +76,10 @@ function getActiveNode() {
 
   if (!node) {
     const curLink = document.querySelector(
-      `a[href="${decodeURIComponent(location.hash).replace(/ /gi, '%20')}"]`
+      `.sidebar-nav a[href="${decodeURIComponent(location.hash).replace(
+        / /gi,
+        '%20'
+      )}"]`
     )
     node = findTagParent(curLink, 'LI', 2)
     if (node) {
@@ -89,7 +92,7 @@ function getActiveNode() {
 function openActiveToRoot(node) {
   if (node) {
     node.classList.add('open', 'active')
-    while (node && node.className !== 'sidebar-nav') {
+    while (node && node.className !== 'sidebar-nav' && node.parentNode) {
       if (
         node.parentNode.tagName === 'LI' ||
         node.parentNode.className === 'app-sub-sidebar'
@@ -104,7 +107,7 @@ function openActiveToRoot(node) {
 function removeOpenToRoot(node) {
   if (node) {
     node.classList.remove('open', 'active')
-    while (node && node.className !== 'sidebar-nav') {
+    while (node && node.className !== 'sidebar-nav' && node.parentNode) {
       if (
         node.parentNode.tagName === 'LI' ||
         node.parentNode.className === 'app-sub-sidebar'

@@ -1,6 +1,6 @@
 {
   "name": "docsify-sidebar-collapse",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "sidebar-collapse plugin for docsify",
   "main": "src",
   "scripts": {

@@ -108,7 +108,7 @@
     var node = document.querySelector('.sidebar-nav .active');
 
     if (!node) {
-      var curLink = document.querySelector("a[href=\"".concat(decodeURIComponent(location.hash).replace(/ /gi, '%20'), "\"]"));
+      var curLink = document.querySelector(".sidebar-nav a[href=\"".concat(decodeURIComponent(location.hash).replace(/ /gi, '%20'), "\"]"));
       node = findTagParent(curLink, 'LI', 2);
 
       if (node) {
@@ -123,7 +123,7 @@
     if (node) {
       node.classList.add('open', 'active');
 
-      while (node && node.className !== 'sidebar-nav') {
+      while (node && node.className !== 'sidebar-nav' && node.parentNode) {
         if (node.parentNode.tagName === 'LI' || node.parentNode.className === 'app-sub-sidebar') {
           node.parentNode.classList.add('open');
         }
@@ -137,7 +137,7 @@
     if (node) {
       node.classList.remove('open', 'active');
 
-      while (node && node.className !== 'sidebar-nav') {
+      while (node && node.className !== 'sidebar-nav' && node.parentNode) {
         if (node.parentNode.tagName === 'LI' || node.parentNode.className === 'app-sub-sidebar') {
           node.parentNode.classList.remove('open');
         }
