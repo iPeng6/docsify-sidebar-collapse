@@ -11,14 +11,14 @@ function sidebarCollapsePlugin(hook, vm) {
 
     next(html)
   })
-}
-
-function init() {
-  document.addEventListener('DOMContentLoaded', () => {
+  hook.ready(function (html, next) {
     document
       .querySelector('.sidebar-nav')
       .addEventListener('click', handleMenuClick)
   })
+}
+
+function init() {
   document.addEventListener('scroll', scrollSyncMenuStatus)
 }
 
