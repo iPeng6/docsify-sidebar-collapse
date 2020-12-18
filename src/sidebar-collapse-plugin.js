@@ -11,7 +11,7 @@ function sidebarCollapsePlugin(hook, vm) {
 
     next(html)
   })
-  hook.ready(function (html, next) {
+  hook.ready(function () {
     document
       .querySelector('.sidebar-nav')
       .addEventListener('click', handleMenuClick)
