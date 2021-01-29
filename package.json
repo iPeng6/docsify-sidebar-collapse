@@ -1,6 +1,6 @@
 {
   "name": "docsify-sidebar-collapse",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "sidebar-collapse plugin for docsify",
   "main": "src",
   "scripts": {
@@ -10,7 +10,8 @@
     "build:rollup": "rollup -c",
     "build:minify": "uglifyjs --compress --mangle --output ./dist/docsify-sidebar-collapse.min.js -- ./dist/docsify-sidebar-collapse.js",
     "build:css": "cleancss -o dist/sidebar.min.css src/sidebar.css &&cleancss -o dist/sidebar-folder.min.css src/sidebar-folder.css",
-    "pb": "npm run build && npm publish"
+    "pb": "npm run build && npm publish",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",

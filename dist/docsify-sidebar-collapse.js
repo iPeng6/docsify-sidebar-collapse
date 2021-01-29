@@ -39,6 +39,7 @@
       var activeNode = getActiveNode();
       openActiveToRoot(activeNode);
       addFolderFileClass();
+      addLevelClass();
       syncScrollTop(activeNode);
       next(html);
     });
@@ -171,6 +172,26 @@
         li.classList.add('file');
       }
     });
+  }
+
+  function addLevelClass() {
+    function find(root, level) {
+      root.childNodes && root.childNodes.forEach(function (child) {
+        if (child.classList && child.classList.contains('folder')) {
+          child.classList.add("level-".concat(level));
+
+          if (window.$docsify && window.$docsify.sidebarDisplayLevel && typeof window.$docsify.sidebarDisplayLevel === 'number' && level <= window.$docsify.sidebarDisplayLevel) {
+            child.classList.add('open');
+          }
+
+          if (child && child.childNodes.length > 1) {
+            find(child.childNodes[1], level + 1);
+          }
+        }
+      });
+    }
+
+    find(document.querySelector('.sidebar-nav > ul'), 1);
   }
 
   init();

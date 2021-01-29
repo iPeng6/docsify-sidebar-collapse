@@ -24,6 +24,7 @@ Then insert script into document just like the [official plugins](https://docsif
     },
     subMaxLevel: 3,
     ...
+    sidebarDisplayLevel: 1, // set sidebar display level
   }
 </script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
