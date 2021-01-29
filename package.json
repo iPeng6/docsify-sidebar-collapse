@@ -11,7 +11,7 @@
     "build:minify": "uglifyjs --compress --mangle --output ./dist/docsify-sidebar-collapse.min.js -- ./dist/docsify-sidebar-collapse.js",
     "build:css": "cleancss -o dist/sidebar.min.css src/sidebar.css &&cleancss -o dist/sidebar-folder.min.css src/sidebar-folder.css",
     "pb": "npm run build && npm publish",
-    "prepack": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
