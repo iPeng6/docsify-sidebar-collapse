@@ -144,7 +144,7 @@ function addFolderFileClass() {
 
 function addLevelClass() {
   function find(root, level) {
-    root.childNodes &&
+    root && root.childNodes &&
       root.childNodes.forEach((child) => {
         if (child.classList && child.classList.contains('folder')) {
           child.classList.add(`level-${level}`)
